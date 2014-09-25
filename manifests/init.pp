@@ -25,7 +25,7 @@ class security (
     'Ubuntu': {
       exec { 'apt-get update':
         command               => '/usr/bin/apt-get update',
-        onlyif                => 'test ! -f /var/lock/puppet-once',
+        unless                => 'test -f /var/lock/puppet-once',
       }
       package { $securitypackage:
         ensure                => $security_status,
@@ -34,14 +34,15 @@ class security (
       }
       exec { 'run-once-commands':
         command               => '/usr/bin/touch /var/lock/puppet-once',
+        refreshonly           => true,
         creates               => '/var/lock/puppet-once',
-        require               => Package[$securitypackage],
+        subscribe             => Package[$securitypackage],
       }
     }
     'CentOS': {
       exec { 'yum update':
         command               => '/usr/bin/yum update',
-        onlyif                => 'test ! -f /var/lock/puppet-once',
+        unless                => 'test -f /var/lock/puppet-once',
       }
       package { $securitypackage:
         ensure                => $security_status,
@@ -50,8 +51,9 @@ class security (
       }
       exec { 'run-once-commands':
         command               => '/bin/touch /var/lock/puppet-once',
+        refreshonly           => true,
         creates               => '/var/lock/puppet-once',
-        require               => Package[$securitypackage],
+        subscribe             => Package[$securitypackage],
       }
     }
   'default': {
