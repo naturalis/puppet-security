@@ -36,11 +36,23 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class security (
+  $securitypackage = undef,
+  $security_status = 'latest',
+  $once_lock       = "/var/lock/puppet-once",
+  ) {
 
-  $securitypackage                    = undef,
-  $security_status                    = 'latest',
+# Default setting for exec command
+  Exec {
+    refreshonly => true,
+  }
 
-) {
+# Make sure exec commands only run once
+  exec { 'run-once-commands':
+    command => "touch $once_lock",
+    creates => $once_lock,
+    notify  => [Exec['apt-get update'],
+                Exec['yum update']],
+  }
 
 case $operatingsystem {
   'Ubuntu': {
