@@ -18,14 +18,13 @@ class security (
     }
   }
   else {
-  Exec {
-    refreshonly               => true,
-  }
+
   case $operatingsystem {
     'Ubuntu': {
       exec { 'apt-get update':
         command               => '/usr/bin/apt-get update',
         unless                => 'test -f /var/lock/puppet-once',
+        path                  => '/usr/local/bin/:/bin/',
       }
       package { $securitypackage:
         ensure                => $security_status,
@@ -43,6 +42,7 @@ class security (
       exec { 'yum update':
         command               => '/usr/bin/yum update',
         unless                => 'test -f /var/lock/puppet-once',
+        path                  => '/usr/local/bin/:/bin/',
       }
       package { $securitypackage:
         ensure                => $security_status,
