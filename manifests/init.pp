@@ -23,8 +23,7 @@ class security (
     'Ubuntu': {
       exec { 'apt-get update':
         command               => '/usr/bin/apt-get update',
-        unless                => 'test -f /var/lock/puppet-once',
-        path                  => '/usr/local/bin/:/bin/',
+        unless                => '/usr/bin/test -f /var/lock/puppet-once',
       }
       package { $securitypackage:
         ensure                => $security_status,
@@ -41,8 +40,7 @@ class security (
     'CentOS': {
       exec { 'yum update':
         command               => '/usr/bin/yum update',
-        unless                => 'test -f /var/lock/puppet-once',
-        path                  => '/usr/local/bin/:/bin/',
+        unless                => '/usr/bin/test -f /var/lock/puppet-once',
       }
       package { $securitypackage:
         ensure                => $security_status,
