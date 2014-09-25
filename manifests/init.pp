@@ -25,17 +25,14 @@ class security (
     refreshonly => true,
   }
 
-# Make sure exec commands only run once
-  exec { 'run-once-commands':
-    command => "touch /var/lock/puppet-once",
-    path    => "::path"
-    creates => '/var/lock/puppet-once',
-    notify  => [Exec['apt-get update'],
-                Exec['yum update']],
-  }
-
   case $operatingsystem {
     'Ubuntu': {
+      exec { 'run-once-commands':
+        command => 'touch /var/lock/puppet-once',
+        path    => '::path',
+        creates => '/var/lock/puppet-once',
+        notify  => [Exec['apt-get update']],
+      }
       exec { 'apt-get update':
         command                         => '/usr/bin/apt-get update',
       }
@@ -45,6 +42,12 @@ class security (
       }
     }
     'CentOS': {
+      exec { 'run-once-commands':
+        command => 'touch /var/lock/puppet-once',
+        path    => '::path',
+        creates => '/var/lock/puppet-once',
+        notify  => Exec['yum update']],
+      }
       exec { 'yum update':
         command                       => '/usr/bin/yum update',
       }
