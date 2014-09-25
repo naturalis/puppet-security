@@ -12,7 +12,7 @@ class security (
   ) {
 
   if $securitypackage == 'none' {
-    file {'/var/lock/puppet-once':
+    file {'puppet-once':
       ensure                  => absent,
       path                    => '/var/lock/puppet-once',
     }
