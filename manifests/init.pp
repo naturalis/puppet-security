@@ -35,7 +35,34 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class security {
+class security (
 
+  $securitypackage                    = undef,
+  $security_status                    = 'latest',
 
+) {
+
+case $operatingsystem {
+  'Ubuntu': {
+    exec { 'apt-get update':
+      command                         => '/usr/bin/apt-get update',
+    }
+    package { '$securitypackage':
+      ensure                          => '$security_status',
+      require                         => Exec['apt-get update'],
+    }
+  }
+  'CentOS': {
+    exec { 'yum update':
+        command                       => '/usr/binyum update',
+    }
+    package { '$securitypackage':
+      ensure                          => '$security_status',
+      require                         => Exec['yum update'],
+    }
+  }
+  'default': {
+    notify { "Security fixes are not working on '$operatingsystem' - '$operatingsystemrelease' is not supported": }
+  }
+}
 }
