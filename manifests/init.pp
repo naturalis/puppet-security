@@ -23,33 +23,37 @@ class security (
   }
   case $operatingsystem {
     'Ubuntu': {
-      exec { 'run-once-commands':
-        command               => 'touch /var/lock/puppet-once',
-        path                  => '::path',
-        creates               => '/var/lock/puppet-once',
-        notify                => Exec['apt-get update'],
-      }
       exec { 'apt-get update':
         command               => '/usr/bin/apt-get update',
+        onlyif                => "test ! -f /var/lock/puppet-once",
       }
       package { $securitypackage:
         ensure                => $security_status,
         require               => Exec['apt-get update'],
+        onlyif                => "test ! -f /var/lock/puppet-once",
+        notify                => Exec['run-once-commands'],
+      }
+      exec { 'run-once-commands':
+        command               => '/usr/bin/touch /var/lock/puppet-once',
+        creates               => '/var/lock/puppet-once',
+        require               => Package[$securitypackage],
       }
     }
     'CentOS': {
-      exec { 'run-once-commands':
-        command               => 'touch /var/lock/puppet-once',
-        path                  => '::path',
-        creates               => '/var/lock/puppet-once',
-        notify                => Exec['yum update'],
-      }
       exec { 'yum update':
         command               => '/usr/bin/yum update',
+        onlyif                => "test ! -f /var/lock/puppet-once"
       }
       package { $securitypackage:
         ensure                => $security_status,
         require               => Exec['yum update'],
+        onlyif                => "test ! -f /var/lock/puppet-once",
+        notify                => Exec['run-once-commands'],
+      }
+      exec { 'run-once-commands':
+        command               => 'touch /var/lock/puppet-once',
+        creates               => '/var/lock/puppet-once',
+        require               => Package[$securitypackage],
       }
     }
   'default': {
