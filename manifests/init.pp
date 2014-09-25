@@ -39,7 +39,7 @@ class security (
     }
     'CentOS': {
       exec { 'yum update':
-        command               => '/usr/bin/yum update',
+        command               => '/usr/bin/yum -y -q update',
         unless                => '/usr/bin/test -f /var/lock/puppet-once',
       }
       package { $securitypackage:
