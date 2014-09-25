@@ -24,6 +24,7 @@ class security (
       exec { 'apt-get update':
         command               => '/usr/bin/apt-get update',
         unless                => '/usr/bin/test -f /var/lock/puppet-once',
+        notify                => Exec['run-once-commands'],
       }
       package { $securitypackage:
         ensure                => $security_status,
@@ -41,6 +42,7 @@ class security (
       exec { 'yum update':
         command               => '/usr/bin/yum -y -q update',
         unless                => '/usr/bin/test -f /var/lock/puppet-once',
+        notify                => Exec['run-once-commands'],
       }
       package { $securitypackage:
         ensure                => $security_status,
