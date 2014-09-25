@@ -13,7 +13,7 @@ class security (
   ) {
 
   if $securitypackage == 'none' {
-    file {'$once_lock':
+    file {'once_lock':
       ensure  => absent,
       path    => '$once_lock',
     }
