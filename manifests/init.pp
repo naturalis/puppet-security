@@ -7,12 +7,19 @@
 # Copyright 2014
 #
 class security (
-  $securitypackage = undef,
+  $securitypackage = 'none',
   $security_status = 'latest',
   $once_lock       = '/var/lock/puppet-once',
   ) {
 
-if defined($securitypackage) {
+  if $securitypackage == 'none' {
+    file {'$once_lock':
+      ensure  => absent,
+      path    => '$once_lock',
+    }
+  }
+
+  else {
 
 # Default setting for exec command
   Exec {
@@ -49,12 +56,6 @@ if defined($securitypackage) {
   'default': {
     notify { "Security fixes on '$operatingsystem' - '$operatingsystemrelease' are not supported": }
   }
-  }
 }
-else {
-  file {'$once_lock':
-    ensure  => absent,
-    path    => '$once_lock',
-  }
 }
 }
