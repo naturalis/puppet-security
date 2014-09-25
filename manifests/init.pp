@@ -9,13 +9,12 @@
 class security (
   $securitypackage = 'none',
   $security_status = 'latest',
-  $once_lock       = '/var/lock/puppet-once',
   ) {
 
   if $securitypackage == 'none' {
-    file {'once_lock':
+    file {'/var/lock/puppet-once':
       ensure  => absent,
-      path    => '$once_lock',
+      path    => '/var/lock/puppet-once',
     }
   }
 
