@@ -12,15 +12,15 @@ class security (
   $once_lock       = '/var/lock/puppet-once',
   ) {
 
-if ! defined($securitypackage) {
+  if ! defined($securitypackage) {
 
-  file {'$once_lock':
-    ensure  => absent,
-    path    => '$once_lock',
+    file {'$once_lock':
+      ensure  => absent,
+      path    => '$once_lock',
+    }
   }
-}
 
-else {
+  else {
 
 # Default setting for exec command
   Exec {
@@ -35,25 +35,25 @@ else {
                 Exec['yum update']],
   }
 
-case ${::operatingsystem} {
-  'Ubuntu': {
-    exec { 'apt-get update':
-      command                         => '/usr/bin/apt-get update',
+  case ${::operatingsystem} {
+    'Ubuntu': {
+      exec { 'apt-get update':
+        command                         => '/usr/bin/apt-get update',
+      }
+      package { '$securitypackage':
+        ensure                          => '$security_status',
+        require                         => Exec['apt-get update'],
+      }
     }
-    package { '$securitypackage':
-      ensure                          => '$security_status',
-      require                         => Exec['apt-get update'],
+    'CentOS': {
+      exec { 'yum update':
+        command                       => '/usr/bin/yum update',
+      }
+      package { '$securitypackage':
+        ensure                          => '$security_status',
+        require                         => Exec['yum update'],
+      }
     }
-  }
-  'CentOS': {
-    exec { 'yum update':
-        command                       => '/usr/binyum update',
-    }
-    package { '$securitypackage':
-      ensure                          => '$security_status',
-      require                         => Exec['yum update'],
-    }
-  }
   'default': {
     notify { "Security fixes on '${::operatingsystem}' - '${::operatingsystemrelease}' are not supported": }
   }
