@@ -28,6 +28,7 @@ class security (
 # Make sure exec commands only run once
   exec { 'run-once-commands':
     command => "touch /var/lock/puppet-once",
+    path    => "::path"
     creates => '/var/lock/puppet-once',
     notify  => [Exec['apt-get update'],
                 Exec['yum update']],
