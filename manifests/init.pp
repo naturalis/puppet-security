@@ -51,7 +51,7 @@ class security (
         notify                => Exec['run-once-commands'],
       }
       exec { 'run-once-commands':
-        command               => 'touch /var/lock/puppet-once',
+        command               => '/bin/touch /var/lock/puppet-once',
         creates               => '/var/lock/puppet-once',
         require               => Package[$securitypackage],
       }
