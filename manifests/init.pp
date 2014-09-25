@@ -12,6 +12,16 @@ class security (
   $once_lock       = '/var/lock/puppet-once',
   ) {
 
+if ! defined($securitypackage) {
+
+  file {'$once_lock':
+    ensure  => absent,
+    path    => '$once_lock',
+  }
+}
+
+else {
+
 # Default setting for exec command
   Exec {
     refreshonly => true,
@@ -47,5 +57,6 @@ case ${::operatingsystem} {
   'default': {
     notify { "Security fixes on '${::operatingsystem}' - '${::operatingsystemrelease}' are not supported": }
   }
+}
 }
 }
