@@ -34,7 +34,7 @@ class security (
         command               => 'touch /var/lock/puppet-once',
         path                  => '::path',
         creates               => '/var/lock/puppet-once',
-        notify                => Exec['apt-get update'];
+        notify                => Exec['apt-get update'],
       }
 
       exec { 'apt-get update':
@@ -54,7 +54,7 @@ class security (
         command               => 'touch /var/lock/puppet-once',
         path                  => '::path',
         creates               => '/var/lock/puppet-once',
-        notify                => Exec['yum update'];
+        notify                => Exec['yum update'],
       }
 
       exec { 'yum update':
@@ -67,7 +67,7 @@ class security (
       }
 
     }
-    
+
   'default': {
     notify { "Security fixes on '$operatingsystem' - '$operatingsystemrelease' are not supported": }
   }
