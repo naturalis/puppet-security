@@ -38,7 +38,7 @@
 class security (
   $securitypackage = undef,
   $security_status = 'latest',
-  $once_lock       = "/var/lock/puppet-once",
+  $once_lock       = '/var/lock/puppet-once',
   ) {
 
 # Default setting for exec command
@@ -48,13 +48,13 @@ class security (
 
 # Make sure exec commands only run once
   exec { 'run-once-commands':
-    command => "touch $once_lock",
+    command => "touch ${once_lock}",
     creates => $once_lock,
     notify  => [Exec['apt-get update'],
                 Exec['yum update']],
   }
 
-case $operatingsystem {
+case ${::operatingsystem} {
   'Ubuntu': {
     exec { 'apt-get update':
       command                         => '/usr/bin/apt-get update',
@@ -74,7 +74,7 @@ case $operatingsystem {
     }
   }
   'default': {
-    notify { "Security fixes are not working on '$operatingsystem' - '$operatingsystemrelease' is not supported": }
+    notify { "Security fixes on '${::operatingsystem}' - '${::operatingsystemrelease}' are not supported": }
   }
 }
 }
