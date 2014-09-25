@@ -25,7 +25,7 @@ $security_status                    = 'latest',
 This module has been built on and tested against Puppet 3.2.3 and higher.
 
 The module has been tested on
-- Ubuntu Server 12.04, 14.04
+- Ubuntu 10.04, 12.04, 14.04
 - Centos 6.4, 6.5
 
 ## Dependencies
