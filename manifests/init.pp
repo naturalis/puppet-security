@@ -35,7 +35,7 @@ class security (
                 Exec['yum update']],
   }
 
-  case ${::operatingsystem} {
+  case $operatingsystem {
     'Ubuntu': {
       exec { 'apt-get update':
         command                         => '/usr/bin/apt-get update',
@@ -55,7 +55,7 @@ class security (
       }
     }
   'default': {
-    notify { "Security fixes on '${::operatingsystem}' - '${::operatingsystemrelease}' are not supported": }
+    notify { "Security fixes on '$operatingsystem' - '$operatingsystemrelease' are not supported": }
   }
 }
 }
